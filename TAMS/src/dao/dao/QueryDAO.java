@@ -2,43 +2,44 @@ package dao;
 
 import models.Query;
 import utils.DatabaseConnection;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class QueryDAO {
+
     public boolean addQuery(Query query) {
-        String queryStr = "INSERT INTO queries (user_id, message, status) VALUES (?, ?, ?)";
+        String querySQL = "INSERT INTO queries (user_id, content, date_submitted) VALUES (?, ?, NOW())";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(queryStr)) {
+             PreparedStatement stmt = conn.prepareStatement(querySQL)) {
             stmt.setInt(1, query.getUserId());
-            stmt.setString(2, query.getMessage());
-            stmt.setString(3, query.getStatus());
+            stmt.setString(2, query.getContent());
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
-    public List<Query> getAllQueries() {
+    public List<Query> getQueriesByUserId(int userId) {
         List<Query> queries = new ArrayList<>();
-        String queryStr = "SELECT * FROM queries";
+        String querySQL = "SELECT * FROM queries WHERE user_id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(queryStr)) {
+             PreparedStatement stmt = conn.prepareStatement(querySQL)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                queries.add(new Query(
-                        rs.getInt("id"),
-                        rs.getInt("user_id"),
-                        rs.getString("message"),
-                        rs.getString("status")
-                ));
+                Query query = new Query();
+                query.setId(rs.getInt("id"));
+                query.setUserId(rs.getInt("user_id"));
+                query.setContent(rs.getString("content"));
+                query.setDateSubmitted(rs.getDate("date_submitted"));
+                queries.add(query);
             }
-
-        
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -29,7 +29,7 @@ public class DashboardPage {
         panel.add(analyticsButton);
         frame.add(panel, BorderLayout.CENTER);
 
-        packageManagementButton.addActionListener(e -> new PackageManagementPage(user));
+        packageManagementButton.addActionListener(e -> new PackageManagementPage());
         bookingButton.addActionListener(e -> new BookingPage(user));
         customerSupportButton.addActionListener(e -> new CustomerSupportPage(user));
         analyticsButton.addActionListener(e -> new AnalyticsPage(user));

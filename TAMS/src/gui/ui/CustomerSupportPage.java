@@ -1,39 +1,64 @@
 package ui;
 
+import dao.QueryDAO;
+import models.Query;
 import models.User;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
 public class CustomerSupportPage {
     private JFrame frame;
     private User user;
+    private QueryDAO queryDAO;
 
     public CustomerSupportPage(User user) {
         this.user = user;
+        this.queryDAO = new QueryDAO();
+
         frame = new JFrame("Customer Support");
-        frame.setSize(400, 300);
+        frame.setSize(600, 400);
         frame.setLayout(new BorderLayout());
 
-        JLabel label = new JLabel("Customer Support", JLabel.CENTER);
+        // Create buttons for submitting a query and viewing queries
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
+
         JButton submitQueryButton = new JButton("Submit Query");
         JButton viewQueriesButton = new JButton("View My Queries");
 
-        frame.add(label, BorderLayout.NORTH);
-        JPanel panel = new JPanel();
-        panel.add(submitQueryButton);
-        panel.add(viewQueriesButton);
-        frame.add(panel, BorderLayout.CENTER);
+        buttonPanel.add(submitQueryButton);
+        buttonPanel.add(viewQueriesButton);
 
-        submitQueryButton.addActionListener(e -> {
-            // Placeholder for query submission logic
-            JOptionPane.showMessageDialog(frame, "Submit query functionality not implemented yet.");
+        frame.add(buttonPanel, BorderLayout.NORTH);
+
+        // Submit query functionality
+        submitQueryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setVisible(false);
+                new SubmitQueryPage(user, queryDAO);
+            }
         });
 
-        viewQueriesButton.addActionListener(e -> {
-            // Placeholder for viewing queries logic
-            JOptionPane.showMessageDialog(frame, "View queries functionality not implemented yet.");
+        // View queries functionality
+        viewQueriesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setVisible(false);
+                new ViewQueriesPage(user, queryDAO);
+            }
         });
 
         frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        // Sample user for testing, replace with actual login handling
+        User testUser = new User(0, null, null, null, null);
+        testUser.setId(1); // Replace with actual user ID
+        new CustomerSupportPage(testUser);
     }
 }

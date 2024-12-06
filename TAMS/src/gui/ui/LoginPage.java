@@ -2,11 +2,10 @@ package ui;
 
 import dao.UserDAO;
 import models.User;
-
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
 
 public class LoginPage {
     private JFrame frame;
@@ -53,7 +52,8 @@ public class LoginPage {
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Registration page not implemented yet.");
+                frame.setVisible(false);
+                new RegisterPage();
             }
         });
 

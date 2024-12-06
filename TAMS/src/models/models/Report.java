@@ -1,28 +1,33 @@
 package models;
 
+import java.util.Date;
+
 public class Report {
     private int id;
     private String title;
-    private String content;
-    private String generatedDate;
+    private Date dateCreated;
 
-    public Report(int id, String title, String content, String generatedDate) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.generatedDate = generatedDate;
+    public int getId() {
+        return id;
     }
 
-    // Getters and Setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public String getTitle() {
+        return title;
+    }
 
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public String getGeneratedDate() { return generatedDate; }
-    public void setGeneratedDate(String generatedDate) { this.generatedDate = generatedDate; }
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
 }

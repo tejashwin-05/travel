@@ -1,39 +1,57 @@
 package ui;
 
-import models.User;
+import dao.PackageDAO;
+import models.Package;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 
 public class PackageManagementPage {
     private JFrame frame;
-    private User user;
+    private PackageDAO packageDAO;
 
-    public PackageManagementPage(User user) {
-        this.user = user;
-        frame = new JFrame("Package Management");
-        frame.setSize(400, 300);
+    public PackageManagementPage() {
+        frame = new JFrame("Manage Packages");
+        frame.setSize(600, 400);
         frame.setLayout(new BorderLayout());
+        packageDAO = new PackageDAO();
 
-        JLabel label = new JLabel("Package Management", JLabel.CENTER);
+        // Create a panel for buttons
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout());
+
         JButton createPackageButton = new JButton("Create Package");
-        JButton viewPackagesButton = new JButton("View Packages");
+        JButton viewPackageButton = new JButton("View Packages");
 
-        frame.add(label, BorderLayout.NORTH);
-        JPanel panel = new JPanel();
-        panel.add(createPackageButton);
-        panel.add(viewPackagesButton);
-        frame.add(panel, BorderLayout.CENTER);
+        buttonPanel.add(createPackageButton);
+        buttonPanel.add(viewPackageButton);
 
-        createPackageButton.addActionListener(e -> {
-            // Placeholder for package creation logic
-            JOptionPane.showMessageDialog(frame, "Package creation functionality not implemented yet.");
+        frame.add(buttonPanel, BorderLayout.NORTH);
+
+        // Create package functionality
+        createPackageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setVisible(false);
+                new CreatePackagePage(packageDAO);
+            }
         });
 
-        viewPackagesButton.addActionListener(e -> {
-            // Placeholder for viewing packages logic
-            JOptionPane.showMessageDialog(frame, "View packages functionality not implemented yet.");
+        // View package functionality
+        viewPackageButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.setVisible(false);
+                new ViewPackagesPage(packageDAO);
+            }
         });
 
         frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new PackageManagementPage();
     }
 }

@@ -1,21 +1,23 @@
 package dao;
 
-import java.sql.*;
+import models.Booking;
+import utils.DatabaseConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import utils.DatabaseConnection;
-
-import models.Booking;
 
 public class BookingDAO {
+
     public boolean addBooking(Booking booking) {
-        String query = "INSERT INTO bookings (user_id, package_id, booking_date, payment_status) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO bookings (user_id, package_id, booking_date) VALUES (?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, booking.getUserId());
             stmt.setInt(2, booking.getPackageId());
             stmt.setString(3, booking.getBookingDate());
-            stmt.setString(4, booking.getPaymentStatus());
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -32,13 +34,12 @@ public class BookingDAO {
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                bookings.add(new Booking(
-                        rs.getInt("id"),
-                        rs.getInt("user_id"),
-                        rs.getInt("package_id"),
-                        rs.getString("booking_date"),
-                        rs.getString("payment_status")
-                ));
+                Booking booking = new Booking();
+                booking.setId(rs.getInt("id"));
+                booking.setUserId(rs.getInt("user_id"));
+                booking.setPackageId(rs.getInt("package_id"));
+                booking.setBookingDate(rs.getString("booking_date"));
+                bookings.add(booking);
             }
         } catch (SQLException e) {
             e.printStackTrace();
